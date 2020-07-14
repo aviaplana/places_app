@@ -18,8 +18,16 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField "String", "PLACES_API_KEY", placesApiKey
+            buildConfigField "String", "PLACES_API_URL", "\"https://maps.googleapis.com/maps/api/place/nearbysearch/\""
+        }
+
         release {
             minifyEnabled false
+            buildConfigField "String", "PLACES_API_KEY", placesApiKey
+            buildConfigField "String", "PLACES_API_URL", "\"https://maps.googleapis.com/maps/api/place/nearbysearch/\""
+
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
