@@ -1,3 +1,5 @@
 rootProject.name = "ChamaAssignment"
 include ':app'
 include ':domain'
+include ':infrastructure'
+include ':presentation'

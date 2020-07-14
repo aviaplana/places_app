@@ -3,6 +3,8 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.7">
       <module name="ChamaAssignment.app" target="1.8" />
+      <module name="ChamaAssignment.infrastructure" target="1.8" />
+      <module name="ChamaAssignment.presentation" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
