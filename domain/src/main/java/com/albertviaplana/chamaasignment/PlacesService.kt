@@ -3,13 +3,13 @@ package com.albertviaplana.chamaasignment
 import com.github.kittinunf.result.flatMap
 
 class PlacesService(
-        private val placesRepository: PlacesRepository,
-        private val locationService: LocationService
+    private val placesRepositoryPort: PlacesRepositoryPort,
+    private val locationServicePort: LocationServicePort
 ) {
-    suspend fun getNearbyPlaces() =
-        locationService.getCurrentLocation()
-            .flatMap { placesRepository.getNearbyPlaces(it) }
+    suspend fun getNearbyPlaces(range: Int) =
+        locationServicePort.getCurrentLocation()
+            .flatMap { placesRepositoryPort.getNearbyPlaces(it, range) }
 
     suspend fun getPlaceDetails(placeId: String) =
-        placesRepository.getPlaceDetails(placeId)
+        placesRepositoryPort.getPlaceDetails(placeId)
 }

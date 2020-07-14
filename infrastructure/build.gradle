@@ -40,6 +40,9 @@ dependencies {
 
     implementation "org.koin:koin-core:$ver.koin"
 
+    implementation "com.github.kittinunf.result:result:$ver.result"
+    implementation "com.github.kittinunf.result:result-coroutines:$ver.result"
+
     implementation "com.google.code.gson:gson:$ver.gson"
     implementation "com.squareup.retrofit2:converter-gson:$ver.gsonConverter"
     implementation "com.squareup.retrofit2:retrofit:$ver.retrofit"

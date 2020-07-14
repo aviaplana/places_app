@@ -42,7 +42,6 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$ver.appCompat"
     implementation "com.google.android.material:material:$ver.material"
 
-
     implementation "com.github.kittinunf.result:result:$ver.result"
     implementation "com.github.kittinunf.result:result-coroutines:$ver.result"
 

@@ -5,7 +5,7 @@ import com.albertviaplana.chamaasignment.entities.Place
 import com.albertviaplana.chamaasignment.entities.PlaceDetails
 import com.github.kittinunf.result.Result
 
-interface PlacesRepository {
-    suspend fun getNearbyPlaces(location: Coordinates): Result<List<Place>, Error>
-    suspend fun getPlaceDetails(placeId: String): Result<PlaceDetails, Error>
+interface PlacesRepositoryPort {
+    suspend fun getNearbyPlaces(location: Coordinates, range: Int): Result<List<Place>, DomainException>
+    suspend fun getPlaceDetails(placeId: String): Result<PlaceDetails, DomainException>
 }
