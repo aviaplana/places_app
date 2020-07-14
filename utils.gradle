@@ -1,0 +1,25 @@
+
+Properties properties = new Properties()
+
+if (project.rootProject.file('local.properties').canRead()) {
+    properties.load(project.rootProject.file("local.properties").newDataInputStream())
+} else {
+    throw new GradleException("Could not read local.properties!")
+}
+
+
+def getPlacesApiKey = { ->
+    def code = properties.getProperty("placesApiKey", "API_KEY")
+
+    if (code == "API_KEY") {
+        throw new GradleException("placesApiKey is not defined in local.properties")
+    }
+
+    return code
+}
+
+
+
+ext {
+    placesApiKey = getPlacesApiKey()
+}
