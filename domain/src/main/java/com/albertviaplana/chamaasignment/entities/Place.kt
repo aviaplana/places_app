@@ -8,5 +8,5 @@ data class Place(
     val iconUrl: String,
     val location: Coordinates,
     val photos: List<Photo>,
-    val types: List<PlaceType>,
+    val types: List<PlaceType>
 )
