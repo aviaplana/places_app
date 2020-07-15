@@ -8,13 +8,16 @@ import com.github.kittinunf.result.Result
 
 class PlacesRepository(private val api: PlacesApi) {
     suspend fun getNearbyPlaces(coordinates: Coordinates, range: Int): Result<List<PlaceData>, Exception> {
-        val maxRange = 50_000
 
-        return if (range > maxRange) {
-            Result.error(Exception("Range exceeds maximum ($maxRange)"))
+        return if (range > MAX_RANGE) {
+            Result.error(Exception("Range exceeds maximum ($MAX_RANGE)"))
         } else {
             api.getTopHeadlines(coordinates.toString(), range)
                 .unwrap()
         }
+    }
+
+    companion object {
+        const val MAX_RANGE = 50_000
     }
 }

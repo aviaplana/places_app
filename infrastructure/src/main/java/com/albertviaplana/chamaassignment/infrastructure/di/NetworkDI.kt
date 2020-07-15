@@ -2,6 +2,7 @@ package com.albertviaplana.chamaassignment.infrastructure.di
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
+import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -13,7 +14,10 @@ val networkModule = module {
         factory { provideGsonConverter() }
     }
 
-fun provideRetrofit(okHttpClient: OkHttpClient, gsonConverterFactory: GsonConverterFactory, apiUrl: String): Retrofit =
+fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory,
+        apiUrl: HttpUrl): Retrofit =
     Retrofit
         .Builder()
         .baseUrl(apiUrl)

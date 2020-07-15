@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class ResponseWrapper<T>(
     val status: ResponseStatus,
-    val result: T,
+    val results: T,
     @SerializedName("next_page_token") val nextPageToken: String?
 )
 
@@ -32,7 +32,7 @@ fun ResponseStatus.toException() =
 
 fun<T> ResponseWrapper<T>.unwrap() =
     if (status.isSuccess()) {
-        Result.success(result)
+        Result.success(results)
     } else {
         val exception = status.toException() ?: UnknownError
         Result.error(exception)

@@ -26,6 +26,7 @@ buildscript {
             espressoCore: "3.2.0",
             junit: "4.13",
             koin: ver.koin,
+            okhttp: ver.okhttp,
             room: ver.room,
         ]
     }

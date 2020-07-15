@@ -1,8 +1,8 @@
 package com.albertviaplana.chamaasignment.entities
 
 data class Coordinates(
-    val latitude: Long,
-    val longitude: Long
+    val latitude: Double,
+    val longitude: Double
 ) {
     override fun toString(): String = "$latitude,$longitude"
 }

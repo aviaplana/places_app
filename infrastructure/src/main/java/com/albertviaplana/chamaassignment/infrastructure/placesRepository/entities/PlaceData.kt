@@ -21,8 +21,8 @@ data class GeometryData(
 )
 
 data class LocationData(
-    @SerializedName("lat") val latitude: Long,
-    @SerializedName("lng") val longitude: Long
+    @SerializedName("lat") val latitude: Double,
+    @SerializedName("lng") val longitude: Double
 )
 
 fun LocationData.toDomain() =
