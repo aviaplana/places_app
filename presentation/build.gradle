@@ -40,7 +40,10 @@ dependencies {
 
     implementation "androidx.core:core-ktx:$ver.coreKtx"
     implementation "androidx.appcompat:appcompat:$ver.appCompat"
+    implementation "androidx.constraintlayout:constraintlayout:$ver.constraintLayout"
     implementation "com.google.android.material:material:$ver.material"
+    implementation "androidx.navigation:navigation-ui-ktx:$ver.navigation"
+    implementation "androidx.navigation:navigation-fragment-ktx:$ver.navigation"
 
     implementation "com.github.kittinunf.result:result:$ver.result"
     implementation "com.github.kittinunf.result:result-coroutines:$ver.result"

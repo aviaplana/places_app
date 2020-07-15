@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nearby_places">Nearby Places</string>
+    <string name="photo_of_place">Photo of the place</string>
+    <string name="rating_star_1">Rating star 1</string>
+    <string name="rating_star_2">Rating star 2</string>
+    <string name="rating_star_3">Rating star 3</string>
+    <string name="rating_star_4">Rating star 4</string>
+    <string name="rating_star_5">Rating star 5</string>
+</resources>
