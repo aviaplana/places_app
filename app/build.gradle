@@ -40,5 +40,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$ver.kotlin"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$ver.coroutines"
 
+    implementation "org.koin:koin-core:$ver.koin"
+    implementation "org.koin:koin-android-viewmodel:$ver.koin"
+
     testImplementation "junit:junit:$testVer.junit"
 }

@@ -7,7 +7,7 @@ import com.albertviaplana.chamaassignment.infrastructure.placesRepository.api.Pl
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val PlacesApiModule = module {
+val placesApiModule = module {
     factory { PlacesAuthInterceptor(BuildConfig.PLACES_API_KEY) }
 
     factory(named("OkHttpWithPlacesAuth")) {
