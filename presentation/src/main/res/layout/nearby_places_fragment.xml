@@ -6,12 +6,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/news_feed"
+        android:id="@+id/places"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:paddingTop="56dp"
+        android:padding="10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:clipToPadding="false"
         tools:listitem="@layout/place_card" />

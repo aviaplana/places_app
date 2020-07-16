@@ -1,4 +1,4 @@
-package com.albertviaplana.chamaassignment.infrastructure.placesRepository
+package com.albertviaplana.chamaassignment.infrastructure.places
 
 import com.albertviaplana.chamaasignment.entities.BusinessStatus
 import com.albertviaplana.chamaasignment.entities.Coordinates
@@ -7,11 +7,11 @@ import com.albertviaplana.chamaassignment.infrastructure.BuildConfig
 import com.albertviaplana.chamaassignment.infrastructure.di.provideGsonConverter
 import com.albertviaplana.chamaassignment.infrastructure.di.provideOkHttpClient
 import com.albertviaplana.chamaassignment.infrastructure.di.provideRetrofit
-import com.albertviaplana.chamaassignment.infrastructure.placesRepository.PlacesRepository.Companion.MAX_RANGE
-import com.albertviaplana.chamaassignment.infrastructure.placesRepository.api.PlacesAuthInterceptor
-import com.albertviaplana.chamaassignment.infrastructure.placesRepository.api.ResponseStatus
-import com.albertviaplana.chamaassignment.infrastructure.placesRepository.di.providePlacesApi
-import com.albertviaplana.chamaassignment.infrastructure.placesRepository.entities.*
+import com.albertviaplana.chamaassignment.infrastructure.places.PlacesRepository.Companion.MAX_RANGE
+import com.albertviaplana.chamaassignment.infrastructure.places.api.PlacesAuthInterceptor
+import com.albertviaplana.chamaassignment.infrastructure.places.api.ResponseStatus
+import com.albertviaplana.chamaassignment.infrastructure.places.di.providePlacesApi
+import com.albertviaplana.chamaassignment.infrastructure.places.entities.*
 import com.github.kittinunf.result.Result
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
@@ -82,10 +82,11 @@ class PlacesRepositoryTest {
         )
 
         return PlaceData(
-            placeId = "Place id",
+            id = "Place id",
             name = "Name",
             vicinity = "Vicinity",
             icon = "Icon url",
+            rating = 3.5f,
             geometry = GeometryData(LocationData(1.toDouble(), 2.toDouble())),
             openingHours = OpeningHoursData(true),
             status = BusinessStatus.OPERATIONAL,
@@ -122,7 +123,8 @@ class PlacesRepositoryTest {
             icon == it.icon &&
             vicinity == it.vicinity &&
             openingHours.isOpen == it.openingHours.isOpen &&
-            placeId == it.placeId &&
+            id == it.id &&
+            rating == it.rating &&
             priceLevel == it.priceLevel &&
             status?.name == it.status?.name
             geometry.location.latitude == it.geometry.location.latitude &&
@@ -143,11 +145,12 @@ class PlacesRepositoryTest {
           "icon" : "$icon",
           "id" : "",
           "name" : "$name",
+          "rating" : "$rating",
           "opening_hours" : {
             "open_now" : ${openingHours.isOpen}
           },
           "photos" : ${photos.joinToString(prefix = "[", postfix = "]") { it.toJson() }},
-          "place_id" : "$placeId",
+          "place_id" : "$id",
           "reference" : "",
           "types" : ${types.joinToString(prefix = "[", postfix = "]") { "\"$it\"" }},
           "vicinity" : "$vicinity",

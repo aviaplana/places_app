@@ -1,4 +1,4 @@
-package com.albertviaplana.chamaassignment.infrastructure.placesRepository.api
+package com.albertviaplana.chamaassignment.infrastructure.places.api
 
 import com.github.kittinunf.result.Result
 import com.google.gson.annotations.SerializedName
@@ -32,8 +32,7 @@ fun ResponseStatus.toException() =
 
 fun<T> ResponseWrapper<T>.unwrap() =
     if (status.isSuccess()) {
-        Result.success(results)
+        results
     } else {
-        val exception = status.toException() ?: UnknownError
-        Result.error(exception)
+        throw status.toException() ?: UnknownError
     }

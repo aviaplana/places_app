@@ -5,25 +5,38 @@ import android.util.AttributeSet
 import android.widget.ImageView
 import android.widget.LinearLayout
 import com.albertviaplana.chamaassignment.presentation.R
+import com.albertviaplana.chamaassignment.presentation.databinding.RatingStarsBinding.bind
+import com.albertviaplana.chamaassignment.presentation.databinding.RatingStarsBinding
 
 class RatingStarsView(context: Context, attrs: AttributeSet): LinearLayout(context, attrs) {
+    private val binding: RatingStarsBinding
+    var rating: Float = .0f
+        set(newRating) {
+            field = newRating
+            val stars: List<ImageView> = listOf(
+                binding.star1,
+                binding.star2,
+                binding.star3,
+                binding.star4,
+                binding.star5
+            )
+
+            setStars(stars, newRating)
+        }
 
     init {
-        inflate(context, R.layout.rating_stars, this)
-        val stars: List<ImageView> = listOf(findViewById(R.id.star_1),
-                findViewById(R.id.star_2),
-                findViewById(R.id.star_3),
-                findViewById(R.id.star_4),
-                findViewById(R.id.star_5))
-        val attributes = context.obtainStyledAttributes(attrs, R.styleable.RatingStarsView)
-        val rating = attributes.getFloat(R.styleable.RatingStarsView_rating, 0.0f)
+        val view = inflate(context, R.layout.rating_stars, this)
+        binding = bind(view)
 
-        setStars(stars, rating)
+        val attributes = context.obtainStyledAttributes(attrs, R.styleable.RatingStarsView)
+        val placeRating = attributes.getFloat(R.styleable.RatingStarsView_rating, 0.0f)
+
+        rating = placeRating
         attributes.recycle()
     }
 
     private fun setStars(stars: List<ImageView>, rating: Float) {
-        (0..stars.size).forEach {
+        (stars.indices).forEach {
             stars[it].setStar(rating - it)
         }
     }

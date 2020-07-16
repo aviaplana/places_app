@@ -1,4 +1,4 @@
-package com.albertviaplana.chamaassignment.infrastructure.placesRepository.entities
+package com.albertviaplana.chamaassignment.infrastructure.places.entities
 
 import com.albertviaplana.chamaasignment.entities.Photo
 import com.google.gson.annotations.SerializedName

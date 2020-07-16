@@ -7,6 +7,10 @@ android {
     compileSdkVersion 29
     buildToolsVersion "30.0.0"
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 29
@@ -44,6 +48,9 @@ dependencies {
     implementation "com.google.android.material:material:$ver.material"
     implementation "androidx.navigation:navigation-ui-ktx:$ver.navigation"
     implementation "androidx.navigation:navigation-fragment-ktx:$ver.navigation"
+
+    implementation "org.koin:koin-core:$ver.koin"
+    implementation "org.koin:koin-android-viewmodel:$ver.koin"
 
     implementation "com.github.kittinunf.result:result:$ver.result"
     implementation "com.github.kittinunf.result:result-coroutines:$ver.result"

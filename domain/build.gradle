@@ -12,6 +12,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$ver.kotlin"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$ver.coroutines"
 
+    implementation "org.koin:koin-core:$ver.koin"
+
     implementation "com.github.kittinunf.result:result:$ver.result"
     implementation "com.github.kittinunf.result:result-coroutines:$ver.result"
 }

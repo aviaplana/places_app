@@ -1,11 +1,11 @@
-package com.albertviaplana.chamaassignment.infrastructure.placesRepository.api
+package com.albertviaplana.chamaassignment.infrastructure.places.api
 
-import com.albertviaplana.chamaassignment.infrastructure.placesRepository.entities.PlaceData
+import com.albertviaplana.chamaassignment.infrastructure.places.entities.PlaceData
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface PlacesApi {
-    @GET("place/nearbysearch/")
+    @GET("place/nearbysearch/json")
     suspend fun getTopHeadlines(
         @Query("location") location: String,
         @Query("radius") radius: Int

@@ -1,4 +1,4 @@
-package com.albertviaplana.chamaassignment.infrastructure.placesRepository.api
+package com.albertviaplana.chamaassignment.infrastructure.places.api
 
 import okhttp3.Interceptor
 import okhttp3.Response
