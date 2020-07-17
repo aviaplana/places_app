@@ -1,7 +1,8 @@
 package com.albertviaplana.chamaasignment
 
-sealed class DomainException: Exception()
-data class AccessDenied(val originalException: Exception? = null): DomainException()
-data class ApiException(val originalException: Exception? = null): DomainException()
-data class ApiUnavailable(val originalException: Exception? = null): DomainException()
-data class ExceptionUnknown(val originalException: Exception? = null): DomainException()
+sealed class DomainException(override val message: String? = ""): Exception()
+data class AccessDenied(val rootException: Exception? = null): DomainException(rootException?.message)
+data class ApiException(val rootException: Exception? = null): DomainException(rootException?.message)
+data class ApiUnavailable(val rootException: Exception? = null): DomainException(rootException?.message)
+object NetworkException: DomainException("Network error. Check your connectivity.")
+data class ExceptionUnknown(val rootException: Exception? = null): DomainException(rootException?.message)

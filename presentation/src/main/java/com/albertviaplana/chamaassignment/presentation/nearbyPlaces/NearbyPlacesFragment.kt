@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -39,9 +40,17 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
                 .collect{
                     when (it) {
                         is ShowDetails -> navigateToDetails()
+                        is ShowError -> showError(it.message)
                     }
                 }
         }
+    }
+
+    private fun showError(message: String) {
+        val duration = Toast.LENGTH_SHORT
+
+        Toast.makeText(activity, message, duration)
+                .show()
     }
 
     private fun navigateToDetails() {

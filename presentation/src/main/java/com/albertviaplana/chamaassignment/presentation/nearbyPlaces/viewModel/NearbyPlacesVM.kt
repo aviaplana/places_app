@@ -25,8 +25,8 @@ fun Place.toVM() =
         openStatus = openStatus
     )
 
-sealed class Event()
-data class Error(val message: String): Event()
+sealed class Event
+data class ShowError(val message: String): Event()
 object ShowDetails: Event()
 
 sealed class Action

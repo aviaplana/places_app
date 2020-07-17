@@ -4,8 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.albertviaplana.chamaasignment.PlacesService
 import com.albertviaplana.chamaassignment.presentation.common.viewModel.BaseViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -48,7 +46,7 @@ class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewM
                             )}
                         }, {
                             currentState = currentState.copy(isLoading = false)
-                            sendEventViewModelScope(Error(it.localizedMessage.orEmpty()))
+                            sendEventViewModelScope(ShowError(it.message.orEmpty()))
                         }
                     )
             }
@@ -71,7 +69,7 @@ class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewM
                     places = listPlaces.map { it.toVM() })
                 }, {
                     currentState = currentState.copy(isLoading = false)
-                    sendEventViewModelScope(Error(it.localizedMessage.orEmpty()))
+                    sendEventViewModelScope(ShowError(it.message.orEmpty()))
                 }
             )
     }

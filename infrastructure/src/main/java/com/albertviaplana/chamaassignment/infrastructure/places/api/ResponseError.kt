@@ -1,9 +1,9 @@
 package com.albertviaplana.chamaassignment.infrastructure.places.api
 
-import com.albertviaplana.chamaasignment.AccessDenied
-import com.albertviaplana.chamaasignment.ApiException
-import com.albertviaplana.chamaasignment.ExceptionUnknown
+import com.albertviaplana.chamaasignment.*
+import okio.IOException
 import java.net.SocketException
+import java.net.UnknownHostException
 
 sealed class ResponseError: Exception()
 object UnknownError: ResponseError()
@@ -16,6 +16,7 @@ fun Exception.toDomain() =
         is OverQueryLimit,
         is InvalidRequest -> ApiException(this)
         is RequestDenied -> AccessDenied(this)
+        is IOException -> NetworkException
         is SocketException -> ApiException(this)
         else -> ExceptionUnknown(this)
     }
