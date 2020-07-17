@@ -30,18 +30,18 @@ import org.koin.android.viewmodel.ext.android.viewModel
 @ExperimentalCoroutinesApi
 class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
     lateinit var binding: NearbyPlacesFragmentBinding
-    private val vm: NearbyPlacesViewModel by viewModel()
+    private val viewModel: NearbyPlacesViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initPlacesView()
 
-        vm.state.onEach {
-            (binding.places.adapter as PlacesAdapter).setItems(it.places)
-        }.launchIn(lifecycleScope)
+        viewModel.state
+            .onEach { updateView(it) }
+            .launchIn(lifecycleScope)
 
         lifecycleScope.launch {
-            vm.event.consumeAsFlow()
+            viewModel.event.consumeAsFlow()
                 .collect{
                     when (it) {
                         is ShowDetails -> navigateToDetails()
@@ -50,7 +50,28 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
                 }
         }
 
-        if (!requestedPermissions(view.context)) vm notify LoadData
+        if (!requestedPermissions(view.context)) viewModel notify LoadData
+    }
+
+    private fun updateView(vm: NearbyPlacesVM) {
+        with(vm) {
+            setPlaces(places)
+
+            if (isLoading) showProgressBar()
+            else hideProgressBar()
+        }
+    }
+
+    private fun setPlaces(places: List<PlaceVM>) {
+        (binding.places.adapter as PlacesAdapter).setItems(places)
+    }
+
+    private fun showProgressBar() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        binding.progressBar.visibility = View.GONE
     }
 
     private fun requestedPermissions(context: Context) =
@@ -67,8 +88,6 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
                 }
             }
 
-
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -80,12 +99,11 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
             if (grantResults.contains(PackageManager.PERMISSION_DENIED)) {
                 //Show error
             } else {
-                vm notify LoadData
+                viewModel notify LoadData
             }
         }
 
     }
-
 
     private fun showError(message: String) {
         val duration = Toast.LENGTH_SHORT
@@ -116,10 +134,10 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
     private fun initPlacesView() {
         binding.places.apply {
             adapter = PlacesAdapter {
-                vm notify ClickedPlace(it)
+                viewModel notify ClickedPlace(it)
             }
             onReachEndListener {
-                vm notify ScrollBottom
+                viewModel notify ScrollBottom
             }
         }
     }
