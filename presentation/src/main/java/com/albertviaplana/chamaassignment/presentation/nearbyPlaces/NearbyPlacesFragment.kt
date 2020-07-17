@@ -6,18 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.albertviaplana.chamaassignment.presentation.R
 import com.albertviaplana.chamaassignment.presentation.common.onReachEndListener
 import com.albertviaplana.chamaassignment.presentation.databinding.NearbyPlacesFragmentBinding
-import com.albertviaplana.chamaassignment.presentation.nearbyPlaces.viewModel.LoadData
-import com.albertviaplana.chamaassignment.presentation.nearbyPlaces.viewModel.NearbyPlacesViewModel
-import com.albertviaplana.chamaassignment.presentation.nearbyPlaces.viewModel.ClickedPlace
+import com.albertviaplana.chamaassignment.presentation.nearbyPlaces.viewModel.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.consume
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
     lateinit var binding: NearbyPlacesFragmentBinding
@@ -31,6 +34,19 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
             (binding.places.adapter as PlacesAdapter).setItems(it.places)
         }.launchIn(lifecycleScope)
 
+        lifecycleScope.launch {
+            vm.event.consumeAsFlow()
+                .collect{
+                    when (it) {
+                        is ShowDetails -> navigateToDetails()
+                    }
+                }
+        }
+    }
+
+    private fun navigateToDetails() {
+        val action = NearbyPlacesFragmentDirections.actionNearbyPlacesFragmentToPlaceDetailsFragment()
+        findNavController().navigate(action)
     }
 
     override fun onCreateView(

@@ -25,10 +25,9 @@ fun Place.toVM() =
         openStatus = openStatus
     )
 
-sealed class Event
-object Loading: Event()
+sealed class Event()
 data class Error(val message: String): Event()
-
+object ShowDetails: Event()
 
 sealed class Action
 object LoadData: Action()

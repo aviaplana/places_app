@@ -9,6 +9,16 @@
         android:id="@+id/nearbyPlacesFragment"
         android:name="com.albertviaplana.chamaassignment.presentation.nearbyPlaces.NearbyPlacesFragment"
         android:label="@string/nearby_places"
-        tools:layout="@layout/nearby_places_fragment" />
+        tools:layout="@layout/nearby_places_fragment" >
+        <action
+            android:id="@+id/action_nearbyPlacesFragment_to_placeDetailsFragment"
+            app:destination="@id/placeDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/placeDetailsFragment"
+        android:name="com.albertviaplana.chamaassignment.presentation.placeDetails.PlaceDetailsFragment"
+        android:label="@string/nearby_places"
+        tools:layout="@layout/place_details_fragment" />
 
 </navigation>

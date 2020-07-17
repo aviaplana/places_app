@@ -4,18 +4,20 @@ import androidx.lifecycle.viewModelScope
 import com.albertviaplana.chamaasignment.PlacesService
 import com.albertviaplana.chamaassignment.presentation.common.viewModel.BaseViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewModel<NearbyPlacesVM>() {
+class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewModel<NearbyPlacesVM, Event>() {
     override val _state: MutableStateFlow<NearbyPlacesVM> =
         MutableStateFlow(NearbyPlacesVM(
             places = listOf(),
             isLoading = false
         ))
-    var hasMoreResults= false
 
+    var hasMoreResults= false
 
     init {
         viewModelScope.launch {
@@ -31,21 +33,22 @@ class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewM
     }
 
     private fun loadNextPage() {
-        if (!_state.value.isLoading && hasMoreResults) {
-            _state.value = _state.value.copy(isLoading = true)
+        if (!currentState.isLoading && hasMoreResults) {
+            currentState = currentState.copy(isLoading = true)
 
             viewModelScope.launch {
                 placesService.getNextPageNearbyPlaces()
                     .fold({ listPlaces ->
                         hasMoreResults = listPlaces.size == 20
-                        _state.value = with(_state.value) {
+
+                        currentState = with(currentState) {
                             copy(
                                 isLoading = false,
                                 places = places + listPlaces.map { it.toVM() }
                             )}
                         }, {
-                            _state.value = _state.value.copy(isLoading = false)
-                            println("Exception! $it")
+                            currentState = currentState.copy(isLoading = false)
+                            sendEventViewModelScope(Error(it.localizedMessage.orEmpty()))
                         }
                     )
             }
@@ -53,21 +56,22 @@ class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewM
     }
 
     private fun handleClickedPlace(position: Int) {
-        val place = _state.value.places[position]
+        val place = currentState.places[position]
+        sendEventViewModelScope(ShowDetails)
         println("Clicked place ${place.name}, position $position")
     }
 
     private suspend fun loadInitialData() {
-        _state.value = _state.value.copy(isLoading = true)
+        currentState = currentState.copy(isLoading = true)
         placesService.getNearbyPlaces(1000)
             .fold({listPlaces ->
                 hasMoreResults = listPlaces.size == 20
-                _state.value =_state.value.copy(
+                currentState = currentState.copy(
                     isLoading = false,
                     places = listPlaces.map { it.toVM() })
                 }, {
-                    _state.value = _state.value.copy(isLoading = false)
-                    println("Exception! $it")
+                    currentState = currentState.copy(isLoading = false)
+                    sendEventViewModelScope(Error(it.localizedMessage.orEmpty()))
                 }
             )
     }
