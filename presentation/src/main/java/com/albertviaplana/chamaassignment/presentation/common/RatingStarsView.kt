@@ -1,4 +1,4 @@
-package com.albertviaplana.chamaassignment.presentation.nearbyPlaces
+package com.albertviaplana.chamaassignment.presentation.common
 
 import android.content.Context
 import android.util.AttributeSet
@@ -20,7 +20,6 @@ class RatingStarsView(context: Context, attrs: AttributeSet): LinearLayout(conte
                 binding.star4,
                 binding.star5
             )
-
             setStars(stars, newRating)
         }
 
@@ -36,8 +35,13 @@ class RatingStarsView(context: Context, attrs: AttributeSet): LinearLayout(conte
     }
 
     private fun setStars(stars: List<ImageView>, rating: Float) {
-        (stars.indices).forEach {
-            stars[it].setStar(rating - it)
+        if (rating <= 0.0f) {
+            binding.root.visibility = GONE
+        } else {
+            binding.root.visibility = VISIBLE
+            (stars.indices).forEach {
+                stars[it].setStar(rating - it)
+            }
         }
     }
 
