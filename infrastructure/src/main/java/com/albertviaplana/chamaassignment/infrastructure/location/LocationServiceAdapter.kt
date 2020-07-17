@@ -4,8 +4,10 @@ import com.albertviaplana.chamaasignment.DomainException
 import com.albertviaplana.chamaasignment.LocationServicePort
 import com.albertviaplana.chamaasignment.entities.Coordinates
 import com.github.kittinunf.result.Result
+import com.github.kittinunf.result.map
 
-class LocationServiceAdapter: LocationServicePort {
+class LocationServiceAdapter(private val locationService: LocationService): LocationServicePort {
     override suspend fun getCurrentLocation(): Result<Coordinates, DomainException> =
-        Result.success(Coordinates(42.3675294, -71.186966))
+        locationService.getLocation()
+            .map { Coordinates(it.latitude, it.longitude) }
 }

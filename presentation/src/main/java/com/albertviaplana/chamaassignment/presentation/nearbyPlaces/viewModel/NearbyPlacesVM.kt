@@ -31,4 +31,5 @@ object ShowDetails: Event()
 
 sealed class Action
 object LoadData: Action()
+object ScrollBottom: Action()
 data class ClickedPlace(val position: Int): Action()

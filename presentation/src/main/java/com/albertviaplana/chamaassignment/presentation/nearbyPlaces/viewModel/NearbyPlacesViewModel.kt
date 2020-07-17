@@ -17,15 +17,10 @@ class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewM
 
     var hasMoreResults= false
 
-    init {
-        viewModelScope.launch {
-            loadInitialData()
-        }
-    }
-
     infix fun notify(action: Action) {
         when(action) {
-            is LoadData -> loadNextPage()
+            is LoadData -> loadInitialData()
+            is ScrollBottom -> loadNextPage()
             is ClickedPlace -> handleClickedPlace(action.position)
         }
     }
@@ -59,18 +54,19 @@ class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewM
         println("Clicked place ${place.name}, position $position")
     }
 
-    private suspend fun loadInitialData() {
+    private fun loadInitialData() {
         currentState = currentState.copy(isLoading = true)
-        placesService.getNearbyPlaces(1000)
-            .fold({listPlaces ->
-                hasMoreResults = listPlaces.size == 20
-                currentState = currentState.copy(
-                    isLoading = false,
-                    places = listPlaces.map { it.toVM() })
+        viewModelScope.launch {
+            placesService.getNearbyPlaces(1000)
+                .fold({ listPlaces ->
+                    hasMoreResults = listPlaces.size == 20
+                    currentState = currentState.copy(
+                        isLoading = false,
+                        places = listPlaces.map { it.toVM() })
                 }, {
                     currentState = currentState.copy(isLoading = false)
                     sendEventViewModelScope(ShowError(it.message.orEmpty()))
-                }
-            )
+                })
+        }
     }
 }

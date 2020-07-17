@@ -12,6 +12,7 @@ buildscript {
             gsonConverter: "2.9.0",
             koin: "2.1.5",
             kotlin: "1.3.72",
+            location: "17.0.0",
             material: "1.3.0-alpha01",
             navigation: "2.3.0",
             okhttp: "4.7.2",
