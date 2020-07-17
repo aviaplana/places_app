@@ -4,7 +4,8 @@ import com.albertviaplana.chamaasignment.entities.OpenStatus
 import com.albertviaplana.chamaasignment.entities.Place
 
 data class NearbyPlacesVM (
-    val places: List<PlaceVM>
+    val places: List<PlaceVM>,
+    val isLoading: Boolean
 )
 
 data class PlaceVM(
@@ -30,5 +31,5 @@ data class Error(val message: String): Event()
 
 
 sealed class Action
-object LoadData: Event()
-data class ShowPlace(val position: Int): Event()
+object LoadData: Action()
+data class ClickedPlace(val position: Int): Action()

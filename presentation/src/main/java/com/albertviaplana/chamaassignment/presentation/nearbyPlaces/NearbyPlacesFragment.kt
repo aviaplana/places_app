@@ -7,13 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.albertviaplana.chamaassignment.presentation.R
+import com.albertviaplana.chamaassignment.presentation.common.onReachEndListener
 import com.albertviaplana.chamaassignment.presentation.databinding.NearbyPlacesFragmentBinding
+import com.albertviaplana.chamaassignment.presentation.nearbyPlaces.viewModel.LoadData
 import com.albertviaplana.chamaassignment.presentation.nearbyPlaces.viewModel.NearbyPlacesViewModel
+import com.albertviaplana.chamaassignment.presentation.nearbyPlaces.viewModel.ClickedPlace
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.viewmodel.ext.android.viewModel
+
 
 @ExperimentalCoroutinesApi
 class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
@@ -22,9 +25,9 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setPlacesAdapter()
+        initPlacesView()
 
-        vm.state.filterNotNull().onEach {
+        vm.state.onEach {
             (binding.places.adapter as PlacesAdapter).setItems(it.places)
         }.launchIn(lifecycleScope)
 
@@ -44,7 +47,15 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
     }
 
 
-    private fun setPlacesAdapter() {
-        binding.places.adapter = PlacesAdapter()
+    private fun initPlacesView() {
+        binding.places.apply {
+            adapter = PlacesAdapter {
+                vm notify ClickedPlace(it)
+            }
+            onReachEndListener {
+                vm notify LoadData
+            }
+        }
     }
+
 }

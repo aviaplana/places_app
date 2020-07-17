@@ -31,7 +31,7 @@ val placesApiModule = module {
 
     factory { PlacesRepository(get()) }
 
-    single { PlacesRepositoryAdapter(get()) as PlacesRepositoryPort }
+    factory { PlacesRepositoryAdapter(get()) as PlacesRepositoryPort }
 }
 
 fun provideOkHttpWithPlacesAuth(): OkHttpClient {

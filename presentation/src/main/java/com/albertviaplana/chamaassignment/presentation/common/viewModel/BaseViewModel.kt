@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNot
 
 @ExperimentalCoroutinesApi
-open class BaseViewModel<T> : ViewModel() {
-    protected val _state = MutableStateFlow<T?>(null)
-    val state: Flow<T?> = _state
+abstract class BaseViewModel<T> : ViewModel() {
+    abstract val _state: MutableStateFlow<T>
+    val state: Flow<T> by lazy { _state }
 
 }

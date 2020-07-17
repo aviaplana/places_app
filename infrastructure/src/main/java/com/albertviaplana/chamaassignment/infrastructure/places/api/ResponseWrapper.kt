@@ -32,7 +32,7 @@ fun ResponseStatus.toException() =
 
 fun<T> ResponseWrapper<T>.unwrap() =
     if (status.isSuccess()) {
-        results
+        Pair(nextPageToken, results)
     } else {
         throw status.toException() ?: UnknownError
     }

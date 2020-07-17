@@ -21,6 +21,12 @@ class PlacesRepositoryAdapter(private val repository: PlacesRepository): PlacesR
                 prices.map { it.toDomain() }
             }.mapError { it.toDomain() }
 
+    override suspend fun getNextPageNearbyPlaces(): Result<List<Place>, DomainException> =
+        repository.getNextPageNearbyPlaces()
+            .map { prices ->
+                prices.map { it.toDomain() }
+            }.mapError { it.toDomain() }
+
     override suspend fun getPlaceDetails(placeId: String): Result<PlaceDetails, DomainException> {
         TODO("Not yet implemented")
     }

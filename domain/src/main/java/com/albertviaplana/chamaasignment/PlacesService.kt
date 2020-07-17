@@ -10,6 +10,8 @@ class PlacesService(
         locationServicePort.getCurrentLocation()
             .flatMap { placesRepositoryPort.getNearbyPlaces(it, range) }
 
+    suspend fun getNextPageNearbyPlaces() = placesRepositoryPort.getNextPageNearbyPlaces()
+
     suspend fun getPlaceDetails(placeId: String) =
         placesRepositoryPort.getPlaceDetails(placeId)
 }

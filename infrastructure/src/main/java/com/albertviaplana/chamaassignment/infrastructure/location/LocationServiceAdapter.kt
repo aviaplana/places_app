@@ -8,5 +8,4 @@ import com.github.kittinunf.result.Result
 class LocationServiceAdapter: LocationServicePort {
     override suspend fun getCurrentLocation(): Result<Coordinates, DomainException> =
         Result.success(Coordinates(42.3675294, -71.186966))
-
 }

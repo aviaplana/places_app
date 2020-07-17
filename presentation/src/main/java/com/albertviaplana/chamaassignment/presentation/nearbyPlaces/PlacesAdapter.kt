@@ -10,7 +10,8 @@ import com.albertviaplana.chamaassignment.presentation.R
 import com.albertviaplana.chamaassignment.presentation.databinding.PlaceCardBinding
 import com.albertviaplana.chamaassignment.presentation.nearbyPlaces.viewModel.PlaceVM
 
-class PlacesAdapter: RecyclerView.Adapter<PlacesAdapter.PlaceViewHolder>() {
+class PlacesAdapter(val onClickAction: ((position: Int) -> Unit)? = null):
+        RecyclerView.Adapter<PlacesAdapter.PlaceViewHolder>() {
     private val places: MutableList<PlaceVM> = mutableListOf()
 
     class PlaceViewHolder(view: View): RecyclerView.ViewHolder(view) {
@@ -39,18 +40,35 @@ class PlacesAdapter: RecyclerView.Adapter<PlacesAdapter.PlaceViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceViewHolder {
         val cardView = LayoutInflater.from(parent.context)
             .inflate(R.layout.place_card, parent, false)
+
         return PlaceViewHolder(cardView)
     }
 
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
         holder.bind(places[position])
+        onClickAction?.let{ action ->
+            holder.itemView.setOnClickListener {
+                action(position)
+            }
+        }
     }
 
     override fun getItemCount() = places.size
 
     fun setItems(items: List<PlaceVM>) {
+        val currentSize = places.size
         places.clear()
         places.addAll(items)
-        notifyDataSetChanged()
+
+        if (items.isNotEmpty()) {
+            val offset = currentSize - items.size
+
+            if (offset != 0) {
+                notifyItemRangeInserted(currentSize, items.size)
+            }
+        } else {
+            notifyItemRangeRemoved(0, currentSize)
+        }
+
     }
 }
