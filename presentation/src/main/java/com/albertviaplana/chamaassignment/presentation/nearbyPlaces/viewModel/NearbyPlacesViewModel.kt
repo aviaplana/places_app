@@ -51,23 +51,24 @@ class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewM
     private fun handleClickedPlace(position: Int) {
         val place = currentState.places[position]
         sendEventViewModelScope(ShowDetails(place.id))
-        println("Clicked place ${place.name}, position $position")
     }
 
     private fun loadInitialDataIfNeeded() {
-        currentState = NearbyPlacesVM(places = listOf(), isLoading = true)
-        viewModelScope.launch {
-            placesService.getNearbyPlaces(1000)
-                .fold({ listPlaces ->
-                    hasMoreResults = listPlaces.size == 20
-                    currentState = currentState.copy(
-                        isLoading = false,
-                        places = listPlaces.map { it.toVM() })
-                }, {
-                    currentState = currentState.copy(isLoading = false)
-                    sendEventViewModelScope(ShowError(it.message.orEmpty()))
-                })
+        // Only loads data if state has no data
+        if (currentState.places.isEmpty()) {
+            currentState = NearbyPlacesVM(places = listOf(), isLoading = true)
+            viewModelScope.launch {
+                placesService.getNearbyPlaces(1000)
+                    .fold({ listPlaces ->
+                        hasMoreResults = listPlaces.size == 20
+                        currentState = currentState.copy(
+                            isLoading = false,
+                            places = listPlaces.map { it.toVM() })
+                    }, {
+                        currentState = currentState.copy(isLoading = false)
+                        sendEventViewModelScope(ShowError(it.message.orEmpty()))
+                    })
+            }
         }
-
     }
 }

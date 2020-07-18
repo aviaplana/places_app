@@ -20,10 +20,10 @@ abstract class BaseViewModel<S, E> : ViewModel() {
         }
 
     private val _event = BroadcastChannel<E>(1)
-    val event: ReceiveChannel<E> = _event.openSubscription()
+    val event: ReceiveChannel<E>
+        get() = _event.openSubscription()
 
-
-    fun sendEventViewModelScope(e: E) {
+    protected fun sendEventViewModelScope(e: E) {
         viewModelScope.launch {
             _event.send(e)
         }

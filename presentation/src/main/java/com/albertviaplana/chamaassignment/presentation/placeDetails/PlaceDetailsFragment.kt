@@ -96,7 +96,7 @@ class PlaceDetailsFragment: Fragment(R.layout.place_details_fragment) {
             phoneNumber.text = vm.phoneNumber
             placeIsOpen.text = vm.openStatus.getIsOpenText(root.context)
             (photos.adapter as PhotosAdapter).setPhotos(vm.photos)
-            vm.reviews?.forEachIndexed { index, review ->
+            vm.reviews.forEachIndexed { index, review ->
                 addReviewCellView(review, reviews, index%2 == 0) }
         }
     }

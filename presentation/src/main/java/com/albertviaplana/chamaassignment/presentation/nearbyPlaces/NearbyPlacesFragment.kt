@@ -18,11 +18,9 @@ import com.albertviaplana.chamaassignment.presentation.databinding.NearbyPlacesF
 import com.albertviaplana.chamaassignment.presentation.nearbyPlaces.viewModel.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -35,6 +33,7 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (!requestedPermissions(context)) viewModel reduce LoadData
+        observeEvents()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,20 +43,18 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
         viewModel.state
             .onEach { updateView(it) }
             .launchIn(lifecycleScope)
-
-        observeEvents()
     }
 
     private fun observeEvents() {
-        lifecycleScope.launch {
-            viewModel.event.consumeAsFlow()
-                .collect{
-                    when (it) {
-                        is ShowDetails -> navigateToDetails(it.id)
-                        is ShowError -> showError(it.message)
-                    }
+        viewModel.event
+            .consumeAsFlow()
+            .onEach {
+                println(it)
+                when (it) {
+                    is ShowDetails -> navigateToDetails(it.id)
+                    is ShowError -> showError(it.message)
                 }
-        }
+            }.launchIn(lifecycleScope)
     }
 
     private fun updateView(vm: NearbyPlacesVM) {
@@ -68,7 +65,6 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
             else hideProgressBar()
         }
     }
-
 
     private fun setPlaces(places: List<PlaceVM>) {
         (binding.places.adapter as PlacesAdapter).setItems(places)
@@ -97,10 +93,9 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
             }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == PERMISSIONS_REQUEST_LOCATION &&
