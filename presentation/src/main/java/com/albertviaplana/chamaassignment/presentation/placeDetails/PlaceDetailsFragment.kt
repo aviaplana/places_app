@@ -31,7 +31,7 @@ class PlaceDetailsFragment: Fragment(R.layout.place_details_fragment) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val placeId = arguments?.getString("placeId")
-
+        observeEvents()
         viewModel reduce LoadData(placeId)
     }
     override fun onCreateView(
@@ -51,7 +51,6 @@ class PlaceDetailsFragment: Fragment(R.layout.place_details_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeState()
-        observeEvents()
     }
 
     private fun observeState() {
@@ -68,14 +67,13 @@ class PlaceDetailsFragment: Fragment(R.layout.place_details_fragment) {
     }
 
     private fun observeEvents() {
-        lifecycleScope.launch {
-            viewModel.event.consumeAsFlow()
-                .collect{
-                    when (it) {
-                        is ShowError -> showError(it.message)
-                    }
+        viewModel.event
+            .consumeAsFlow()
+            .onEach {
+                when (it) {
+                    is ShowError -> showError(it.message)
                 }
-        }
+            }.launchIn(lifecycleScope)
     }
 
     private fun showProgressBar() {
