@@ -32,6 +32,11 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
     lateinit var binding: NearbyPlacesFragmentBinding
     private val viewModel: NearbyPlacesViewModel by viewModel()
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (!requestedPermissions(context)) viewModel reduce LoadData
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initPlacesView()
@@ -40,17 +45,19 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
             .onEach { updateView(it) }
             .launchIn(lifecycleScope)
 
+        observeEvents()
+    }
+
+    private fun observeEvents() {
         lifecycleScope.launch {
             viewModel.event.consumeAsFlow()
                 .collect{
                     when (it) {
-                        is ShowDetails -> navigateToDetails()
+                        is ShowDetails -> navigateToDetails(it.id)
                         is ShowError -> showError(it.message)
                     }
                 }
         }
-
-        if (!requestedPermissions(view.context)) viewModel notify LoadData
     }
 
     private fun updateView(vm: NearbyPlacesVM) {
@@ -61,6 +68,7 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
             else hideProgressBar()
         }
     }
+
 
     private fun setPlaces(places: List<PlaceVM>) {
         (binding.places.adapter as PlacesAdapter).setItems(places)
@@ -95,12 +103,9 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == PERMISSIONS_REQUEST_LOCATION) {
-            if (grantResults.contains(PackageManager.PERMISSION_DENIED)) {
-                //Show error
-            } else {
-                viewModel notify LoadData
-            }
+        if (requestCode == PERMISSIONS_REQUEST_LOCATION &&
+            !grantResults.contains(PackageManager.PERMISSION_DENIED)) {
+                viewModel reduce LoadData
         }
 
     }
@@ -112,8 +117,8 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
                 .show()
     }
 
-    private fun navigateToDetails() {
-        val action = NearbyPlacesFragmentDirections.actionNearbyPlacesFragmentToPlaceDetailsFragment()
+    private fun navigateToDetails(productId: String) {
+        val action = NearbyPlacesFragmentDirections.actionNearbyPlacesFragmentToPlaceDetailsFragment(productId)
         findNavController().navigate(action)
     }
 
@@ -134,10 +139,10 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
     private fun initPlacesView() {
         binding.places.apply {
             adapter = PlacesAdapter {
-                viewModel notify ClickedPlace(it)
+                viewModel reduce ClickedPlace(it)
             }
             onReachEndListener {
-                viewModel notify ScrollBottom
+                viewModel reduce ScrollBottom
             }
         }
     }

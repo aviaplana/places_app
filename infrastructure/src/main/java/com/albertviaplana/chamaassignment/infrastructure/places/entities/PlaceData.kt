@@ -12,46 +12,12 @@ data class PlaceData(
     val icon: String,
     val rating: Float,
     val geometry: GeometryData,
-    val openingHours: OpeningHoursData,
+    val openingHours: OpeningHoursData?,
     val status: BusinessStatus?,
     val priceLevel: Int,
     val photos: List<PhotoData>?,
     val types: List<String>
 )
-
-data class GeometryData(
-    val location: LocationData
-)
-
-data class LocationData(
-    @SerializedName("lat") val latitude: Double,
-    @SerializedName("lng") val longitude: Double
-)
-
-fun LocationData.toDomain() =
-    Coordinates(
-        latitude = latitude,
-        longitude = longitude
-    )
-
-data class OpeningHoursData(
-    val isOpen: Boolean
-)
-
-fun OpeningHoursData?.toDomain() =
-    this?.let {
-        if (it.isOpen) OpenStatus.OPEN
-        else OpenStatus.CLOSED
-    } ?: OpenStatus.UNKNOWN
-
-fun mapPlaceType(type: String) =
-    try {
-        PlaceType.valueOf(
-            type.toUpperCase(Locale.ROOT)
-        )
-    } catch(e: Exception) {
-        null
-    }
 
 fun PlaceData.toDomain() =
     Place(
@@ -61,7 +27,7 @@ fun PlaceData.toDomain() =
         iconUrl = icon,
         rating = rating,
         location = geometry.location.toDomain(),
-        openStatus = openingHours.toDomain(),
+        openStatus = openingHours.getOpenStatus(),
         status = status,
         priceLevel = PriceLevel.getByValue(priceLevel),
         photos = photos.orEmpty().map { it.toDomain() },

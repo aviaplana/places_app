@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true"
+    android:layout_marginBottom="10dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/profile_photo"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/profile_photo"
+            tools:background="@color/cardview_dark_background" />
+
+        <Space
+            android:id="@+id/spacer"
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            app:layout_constraintLeft_toRightOf="@id/profile_photo"
+            app:layout_constraintTop_toTopOf="@id/profile_photo"
+            app:layout_constraintBottom_toBottomOf="@id/profile_photo"
+            />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/spacer"
+            app:layout_constraintLeft_toRightOf="@id/spacer"
+            tools:text="a month ago" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/date"
+            app:layout_constraintLeft_toRightOf="@id/spacer"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:text="Robert Ardill" />
+
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/profile_photo"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:text="Awesome offices. Great facilities, location and views. Staff are great hosts" />
+
+
+        <com.albertviaplana.chamaassignment.presentation.common.RatingStarsView
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

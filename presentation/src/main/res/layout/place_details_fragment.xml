@@ -1,14 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <TextView
-        android:id="@+id/address"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
+    android:scrollbars="vertical"
+    android:background="@color/light_gray_background"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nested_photos"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/photos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </androidx.core.widget.NestedScrollView>
+
+        <LinearLayout
+            android:background="#FFFFFF"
+            android:id="@+id/details"
+            app:layout_constraintTop_toBottomOf="@+id/nested_photos"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/place_is_open"
+                    style="@style/secondary_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    tools:text="Open now"/>
+
+                <com.albertviaplana.chamaassignment.presentation.common.RatingStarsView
+                    android:id="@+id/rating"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/name"
+                style="@style/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Rhythmboat Cruises"
+                />
+
+            <TextView
+                android:id="@+id/address"
+                style="@style/body_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="5, 48 Pirrama Rd, Pyrmont NSW 2009, Australia"
+                />
+
+            <TextView
+                android:id="@+id/phone_number"
+                style="@style/body_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="(02) 9374 4000"
+                />
+
+            <TextView
+                android:id="@+id/website"
+                style="@style/secondary_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="https://www.google.com.au/about/careers/locations/sydney/"
+                />
+
+            <TextView
+                android:id="@+id/maps_url"
+                style="@style/secondary_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="https://maps.google.com/?cid=10281119596374313554"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/reviews"
+            app:layout_constraintTop_toBottomOf="@id/details"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <ProgressBar
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

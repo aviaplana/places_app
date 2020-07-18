@@ -2,12 +2,15 @@
 <resources>
     <string name="closed">Closed</string>
 
+    <string name="icon_type_place">Icon corresponding to the type of place</string>
+
     <string name="nearby_places">Nearby Places</string>
 
     <string name="open_now">Open now</string>
 
     <string name="photo_of_place">Photo of the place</string>
     <string name="place_details">Place details</string>
+    <string name="profile_photo">Profile photo</string>
 
     <string name="rating_star_1">Rating star 1</string>
     <string name="rating_star_2">Rating star 2</string>

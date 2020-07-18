@@ -12,13 +12,17 @@
         tools:layout="@layout/nearby_places_fragment" >
         <action
             android:id="@+id/action_nearbyPlacesFragment_to_placeDetailsFragment"
-            app:destination="@id/placeDetailsFragment" />
+            app:destination="@id/placeDetailsFragment">
+            <argument
+                android:name="placeId"
+                app:argType="string" />
+        </action>
     </fragment>
 
     <fragment
         android:id="@+id/placeDetailsFragment"
         android:name="com.albertviaplana.chamaassignment.presentation.placeDetails.PlaceDetailsFragment"
-        android:label="@string/nearby_places"
+        android:label="@string/place_details"
         tools:layout="@layout/place_details_fragment" />
 
 </navigation>

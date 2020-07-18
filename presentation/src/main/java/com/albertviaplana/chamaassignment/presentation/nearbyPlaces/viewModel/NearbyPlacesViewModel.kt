@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewModel<NearbyPlacesVM, Event>() {
+class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewModel<NearbyPlacesVM, NearbyEvent>() {
     override val _state: MutableStateFlow<NearbyPlacesVM> =
         MutableStateFlow(NearbyPlacesVM(
             places = listOf(),
@@ -17,9 +17,9 @@ class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewM
 
     var hasMoreResults= false
 
-    infix fun notify(action: Action) {
+    infix fun reduce(action: NearbyAction) {
         when(action) {
-            is LoadData -> loadInitialData()
+            is LoadData -> loadInitialDataIfNeeded()
             is ScrollBottom -> loadNextPage()
             is ClickedPlace -> handleClickedPlace(action.position)
         }
@@ -50,12 +50,12 @@ class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewM
 
     private fun handleClickedPlace(position: Int) {
         val place = currentState.places[position]
-        sendEventViewModelScope(ShowDetails)
+        sendEventViewModelScope(ShowDetails(place.id))
         println("Clicked place ${place.name}, position $position")
     }
 
-    private fun loadInitialData() {
-        currentState = currentState.copy(isLoading = true)
+    private fun loadInitialDataIfNeeded() {
+        currentState = NearbyPlacesVM(places = listOf(), isLoading = true)
         viewModelScope.launch {
             placesService.getNearbyPlaces(1000)
                 .fold({ listPlaces ->
@@ -68,5 +68,6 @@ class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewM
                     sendEventViewModelScope(ShowError(it.message.orEmpty()))
                 })
         }
+
     }
 }

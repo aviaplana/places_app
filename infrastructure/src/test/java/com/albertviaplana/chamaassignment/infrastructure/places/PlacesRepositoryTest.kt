@@ -130,34 +130,56 @@ class PlacesRepositoryTest {
             geometry.location.latitude == it.geometry.location.latitude &&
             geometry.location.longitude == it.geometry.location.longitude &&
             types.equalTo(it.types) &&
-            photos.size == it.photos.size &&
-            photos.zip(it.photos).all { (x, y) -> x.equalTo(y) }
+            arePhotosEqual(photos, it.photos)
         }
 
-    private fun PlaceData.toJson() = """
-        {
-          "geometry" : {
-            "location" : {
-              "lat" : ${geometry.location.latitude},
-              "lng" : ${geometry.location.longitude}
-            }
-          },
-          "icon" : "$icon",
-          "id" : "",
-          "name" : "$name",
-          "rating" : "$rating",
-          "opening_hours" : {
-            "open_now" : ${openingHours.isOpen}
-          },
-          "photos" : ${photos.joinToString(prefix = "[", postfix = "]") { it.toJson() }},
-          "place_id" : "$id",
-          "reference" : "",
-          "types" : ${types.joinToString(prefix = "[", postfix = "]") { "\"$it\"" }},
-          "vicinity" : "$vicinity",
-          "business_status": "${status?.name}" ,
-          "price_level": $priceLevel
+    private fun arePhotosEqual(a: List<PhotoData>?, b: List<PhotoData>?) =
+        if (a != null && b != null) {
+            a.size == b.size &&
+                    a.zip(b).all { (x, y) -> x.equalTo(y) }
+        } else {
+            a == b
         }
-    """.trimIndent()
+
+
+    private fun PlaceData.toJson(): String {
+        var json = """
+            {
+                "geometry" : {
+                    "location" : {
+                      "lat" : ${geometry.location.latitude},
+                      "lng" : ${geometry.location.longitude}
+                    }
+                },
+                "icon" : "$icon",
+                "id" : "",
+                "name" : "$name",
+                "rating" : "$rating",
+                "opening_hours" : {
+                    "open_now" : ${openingHours.isOpen}
+                },
+                "place_id" : "$id",
+                "reference" : "",
+                "types" : ${types.joinToString(prefix = "[", postfix = "]") { "\"$it\"" }},
+                "vicinity" : "$vicinity",""${'"'},
+                "price_level": $priceLevel,
+                "price_level": $priceLevel
+            """
+
+        if (photos != null) {
+            json += """ "photos" : """
+            json += photos.joinToString(prefix = "[", postfix = "]") { it.toJson() }
+            json += ","
+        }
+
+        if (status != null) {
+            json += """"business_status": "${status?.name}" , """
+        }
+
+        json += """}"""".trimIndent()
+
+        return json
+    }
 
     private fun PhotoData.toJson() =
         """{

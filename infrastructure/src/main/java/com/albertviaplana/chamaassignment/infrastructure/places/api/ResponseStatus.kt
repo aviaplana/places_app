@@ -1,14 +1,5 @@
 package com.albertviaplana.chamaassignment.infrastructure.places.api
 
-import com.github.kittinunf.result.Result
-import com.google.gson.annotations.SerializedName
-
-data class ResponseWrapper<T>(
-    val status: ResponseStatus,
-    val results: T,
-    @SerializedName("next_page_token") val nextPageToken: String?
-)
-
 enum class ResponseStatus {
     OK,
     ZERO_RESULTS,
@@ -28,11 +19,4 @@ fun ResponseStatus.toException() =
         this ==  ResponseStatus.INVALID_REQUEST -> InvalidRequest
         this ==  ResponseStatus.UNKNOWN_ERROR -> UnknownError
         else -> null
-    }
-
-fun<T> ResponseWrapper<T>.unwrap() =
-    if (status.isSuccess()) {
-        Pair(nextPageToken, results)
-    } else {
-        throw status.toException() ?: UnknownError
     }

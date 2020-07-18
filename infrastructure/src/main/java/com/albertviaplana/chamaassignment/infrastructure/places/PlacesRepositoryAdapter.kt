@@ -15,17 +15,18 @@ class PlacesRepositoryAdapter(private val repository: PlacesRepository): PlacesR
     override suspend fun getNearbyPlaces(location: Coordinates, range: Int):
             Result<List<Place>, DomainException> =
         repository.getNearbyPlaces(location, range)
-            .map { prices ->
-                prices.map { it.toDomain() }
+            .map { places ->
+                places.map { it.toDomain() }
             }.mapError { it.toDomain() }
 
     override suspend fun getNextPageNearbyPlaces(): Result<List<Place>, DomainException> =
         repository.getNextPageNearbyPlaces()
-            .map { prices ->
-                prices.map { it.toDomain() }
+            .map { places ->
+                places.map { it.toDomain() }
             }.mapError { it.toDomain() }
 
-    override suspend fun getPlaceDetails(placeId: String): Result<PlaceDetails, DomainException> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getPlaceDetails(placeId: String): Result<PlaceDetails, DomainException> =
+        repository.getPlaceDetails(placeId)
+            .map { it.toDomain() }
+            .mapError { it.toDomain() }
 }

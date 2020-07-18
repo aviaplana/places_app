@@ -5,8 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
 import com.albertviaplana.chamaasignment.entities.OpenStatus
 import com.albertviaplana.chamaassignment.presentation.R
+import com.albertviaplana.chamaassignment.presentation.common.getIsOpenText
 import com.albertviaplana.chamaassignment.presentation.databinding.PlaceCardBinding
 import com.albertviaplana.chamaassignment.presentation.nearbyPlaces.viewModel.PlaceVM
 
@@ -20,21 +22,12 @@ class PlacesAdapter(val onClickAction: ((position: Int) -> Unit)? = null):
         fun bind(place: PlaceVM) {
             with(binding) {
                 placeTitle.text = place.name
-                placeIsOpen.text = getIsOpenText(place.openStatus)
+                placeIsOpen.text = place.openStatus.getIsOpenText(binding.root.context)
                 placeVicinity.text = place.vicinity
                 placeRating.rating = place.rating
+                placeIcon.load(place.iconUrl)
             }
         }
-
-        private fun getIsOpenText(openStatus: OpenStatus) =
-            if (openStatus == OpenStatus.UNKNOWN) {
-                ""
-            } else {
-                val stringId =
-                    if (openStatus == OpenStatus.OPEN) R.string.open_now
-                    else R.string.closed
-                binding.root.context.getString(stringId)
-            }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceViewHolder {

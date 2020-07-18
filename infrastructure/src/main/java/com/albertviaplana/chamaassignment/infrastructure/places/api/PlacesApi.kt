@@ -1,6 +1,7 @@
 package com.albertviaplana.chamaassignment.infrastructure.places.api
 
 import com.albertviaplana.chamaassignment.infrastructure.places.entities.PlaceData
+import com.albertviaplana.chamaassignment.infrastructure.places.entities.PlaceDetailsData
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -9,10 +10,15 @@ interface PlacesApi {
     suspend fun getNearbyPlaces(
         @Query("location") location: String,
         @Query("radius") radius: Int
-    ): ResponseWrapper<List<PlaceData>>
+    ): NearbyPlacesReponseWrapper<List<PlaceData>>
 
     @GET("place/nearbysearch/json")
     suspend fun getNearbyPlaces(
         @Query("pagetoken") token: String
-    ): ResponseWrapper<List<PlaceData>>
+    ): NearbyPlacesReponseWrapper<List<PlaceData>>
+
+    @GET("place/details/json")
+    suspend fun getPlaceDetails(
+        @Query("place_id") id: String
+    ): PlaceDetailsResponseWrapper<PlaceDetailsData>
 }

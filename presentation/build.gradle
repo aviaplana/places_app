@@ -50,6 +50,9 @@ dependencies {
     implementation "com.google.android.material:material:$ver.material"
     implementation "androidx.navigation:navigation-ui-ktx:$ver.navigation"
     implementation "androidx.navigation:navigation-fragment-ktx:$ver.navigation"
+    implementation "androidx.viewpager2:viewpager2:$ver.viewpager"
+
+    implementation "io.coil-kt:coil:$ver.coil"
 
     implementation "org.koin:koin-core:$ver.koin"
     implementation "org.koin:koin-android-viewmodel:$ver.koin"

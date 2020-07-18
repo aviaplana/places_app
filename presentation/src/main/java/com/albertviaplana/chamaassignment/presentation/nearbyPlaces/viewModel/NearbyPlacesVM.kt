@@ -9,6 +9,7 @@ data class NearbyPlacesVM (
 )
 
 data class PlaceVM(
+    val id: String,
     val name: String,
     val iconUrl: String,
     val rating: Float,
@@ -18,6 +19,7 @@ data class PlaceVM(
 
 fun Place.toVM() =
     PlaceVM(
+        id = id,
         name = name,
         iconUrl = iconUrl,
         rating = rating,
@@ -25,11 +27,11 @@ fun Place.toVM() =
         openStatus = openStatus
     )
 
-sealed class Event
-data class ShowError(val message: String): Event()
-object ShowDetails: Event()
+sealed class NearbyEvent
+data class ShowError(val message: String): NearbyEvent()
+data class ShowDetails(val id: String): NearbyEvent()
 
-sealed class Action
-object LoadData: Action()
-object ScrollBottom: Action()
-data class ClickedPlace(val position: Int): Action()
+sealed class NearbyAction
+object LoadData: NearbyAction()
+object ScrollBottom: NearbyAction()
+data class ClickedPlace(val position: Int): NearbyAction()
