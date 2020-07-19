@@ -28,10 +28,19 @@ fun Place.toVM() =
     )
 
 sealed class NearbyEvent
+object ShowFilters: NearbyEvent()
+object ShowFiltersButton: NearbyEvent()
+object HideFiltersButton: NearbyEvent()
+object CheckPermissions: NearbyEvent()
 data class ShowError(val message: String): NearbyEvent()
 data class ShowDetails(val id: String): NearbyEvent()
 
 sealed class NearbyAction
-object LoadData: NearbyAction()
+object Created: NearbyAction()
+object PermissionsGranted: NearbyAction()
+object PermissionsDenied: NearbyAction()
 object ScrollBottom: NearbyAction()
+object ScrollDown: NearbyAction()
+object ScrollUp: NearbyAction()
+object ClickedFiltersButton: NearbyAction()
 data class ClickedPlace(val position: Int): NearbyAction()

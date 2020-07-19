@@ -16,7 +16,7 @@ class PlaceDetailsViewModel(private val placesService: PlacesService):
 
     infix fun reduce(action: DetailsAction) {
         when(action) {
-            is LoadData -> loadData(action.id)
+            is Created -> loadData(action.id)
         }
     }
 

@@ -3,8 +3,8 @@ package com.albertviaplana.chamaassignment.presentation.common
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-fun RecyclerView.onReachEndListener(offset: Int = 5, action: () -> Unit) =
-    addOnScrollListener(object: RecyclerView.OnScrollListener() {
+fun RecyclerView.onReachEnd(offset: Int = 5, action: () -> Unit): RecyclerView {
+    addOnScrollListener(object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 
             //only downwards scrolling
@@ -19,4 +19,31 @@ fun RecyclerView.onReachEndListener(offset: Int = 5, action: () -> Unit) =
             }
         }
     })
+
+    return this
+}
+
+fun RecyclerView.onScrollDown(action: () -> Unit): RecyclerView {
+    addOnScrollListener(object: RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            if (dy > 0) {
+                action()
+            }
+        }
+    })
+
+    return this
+}
+
+fun RecyclerView.onScrollUp(action: () -> Unit): RecyclerView {
+    addOnScrollListener(object: RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            if (dy < 0) {
+                action()
+            }
+        }
+    })
+
+    return this
+}
 

@@ -13,7 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.albertviaplana.chamaassignment.presentation.R
-import com.albertviaplana.chamaassignment.presentation.common.onReachEndListener
+import com.albertviaplana.chamaassignment.presentation.common.onReachEnd
+import com.albertviaplana.chamaassignment.presentation.common.onScrollDown
+import com.albertviaplana.chamaassignment.presentation.common.onScrollUp
 import com.albertviaplana.chamaassignment.presentation.databinding.NearbyPlacesFragmentBinding
 import com.albertviaplana.chamaassignment.presentation.nearbyPlaces.viewModel.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,13 +34,17 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (!requestedPermissions(context)) viewModel reduce LoadData
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         observeEvents()
+        if (savedInstanceState == null) viewModel reduce Created
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initPlacesView()
+        initView()
 
         viewModel.state
             .onEach { updateView(it) }
@@ -49,8 +55,11 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
         viewModel.event
             .consumeAsFlow()
             .onEach {
-                println(it)
                 when (it) {
+                    is ShowFilters -> showFilters()
+                    is CheckPermissions -> requestLocationPermissions(requireContext())
+                    is ShowFiltersButton -> showFiltersButton()
+                    is HideFiltersButton -> hideFiltersButton()
                     is ShowDetails -> navigateToDetails(it.id)
                     is ShowError -> showError(it.message)
                 }
@@ -66,8 +75,20 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
         }
     }
 
+    private fun showFilters() {
+        
+    }
+
     private fun setPlaces(places: List<PlaceVM>) {
         (binding.places.adapter as PlacesAdapter).setItems(places)
+    }
+
+    private fun showFiltersButton() {
+        binding.filterFab.show()
+    }
+
+    private fun hideFiltersButton() {
+        binding.filterFab.hide()
     }
 
     private fun showProgressBar() {
@@ -78,7 +99,7 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
         binding.progressBar.visibility = View.GONE
     }
 
-    private fun requestedPermissions(context: Context) =
+    private fun requestLocationPermissions(context: Context) =
             listOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -86,9 +107,8 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
             .let {
                 if (it.isNotEmpty()) {
                     requestPermissions(it.toTypedArray(), PERMISSIONS_REQUEST_LOCATION)
-                    true
                 } else {
-                    false
+                    viewModel reduce PermissionsGranted
                 }
             }
 
@@ -100,7 +120,9 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
 
         if (requestCode == PERMISSIONS_REQUEST_LOCATION &&
             !grantResults.contains(PackageManager.PERMISSION_DENIED)) {
-                viewModel reduce LoadData
+                viewModel reduce PermissionsGranted
+        } else {
+            viewModel reduce PermissionsDenied
         }
 
     }
@@ -130,15 +152,16 @@ class NearbyPlacesFragment : Fragment(R.layout.nearby_places_fragment) {
         return view
     }
 
+    private fun initView() {
+        with(binding) {
+            places.onReachEnd { viewModel reduce ScrollBottom }
+                .onScrollDown { viewModel reduce ScrollDown }
+                .onScrollUp { viewModel reduce ScrollUp }
+                .adapter = PlacesAdapter {
+                    viewModel reduce ClickedPlace(it)
+                }
 
-    private fun initPlacesView() {
-        binding.places.apply {
-            adapter = PlacesAdapter {
-                viewModel reduce ClickedPlace(it)
-            }
-            onReachEndListener {
-                viewModel reduce ScrollBottom
-            }
+            filterFab.setOnClickListener {viewModel reduce ClickedFiltersButton }
         }
     }
 

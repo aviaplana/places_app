@@ -18,11 +18,38 @@ class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewM
     var hasMoreResults= false
 
     infix fun reduce(action: NearbyAction) {
+        println("ACTION: ${action.javaClass.simpleName}")
+
         when(action) {
-            is LoadData -> loadInitialDataIfNeeded()
+            is PermissionsGranted -> loadInitialData()
+            is Created -> sendCheckPermissions()
+            is PermissionsDenied -> showPermissionsDeniedError()
             is ScrollBottom -> loadNextPage()
+            is ScrollUp -> sendShowFiltersButton()
+            is ScrollDown -> sendHideFiltersButton()
             is ClickedPlace -> handleClickedPlace(action.position)
+            is ClickedFiltersButton -> sendShowFilters()
         }
+    }
+
+    private fun sendCheckPermissions() {
+        sendEventViewModelScope(CheckPermissions)
+    }
+
+    private fun sendShowFilters() {
+        sendEventViewModelScope(ShowFilters)
+    }
+
+    private fun sendHideFiltersButton() {
+        sendEventViewModelScope(HideFiltersButton)
+    }
+
+    private fun sendShowFiltersButton() {
+        sendEventViewModelScope(ShowFiltersButton)
+    }
+
+    private fun showPermissionsDeniedError() {
+        sendEventViewModelScope(ShowError("Permissions must be accepted."))
     }
 
     private fun loadNextPage() {
@@ -53,22 +80,19 @@ class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewM
         sendEventViewModelScope(ShowDetails(place.id))
     }
 
-    private fun loadInitialDataIfNeeded() {
-        // Only loads data if state has no data
-        if (currentState.places.isEmpty()) {
-            currentState = NearbyPlacesVM(places = listOf(), isLoading = true)
-            viewModelScope.launch {
-                placesService.getNearbyPlaces(1000)
-                    .fold({ listPlaces ->
-                        hasMoreResults = listPlaces.size == 20
-                        currentState = currentState.copy(
-                            isLoading = false,
-                            places = listPlaces.map { it.toVM() })
-                    }, {
-                        currentState = currentState.copy(isLoading = false)
-                        sendEventViewModelScope(ShowError(it.message.orEmpty()))
-                    })
-            }
+    private fun loadInitialData() {
+        currentState = NearbyPlacesVM(places = listOf(), isLoading = true)
+        viewModelScope.launch {
+            placesService.getNearbyPlaces(1000)
+                .fold({ listPlaces ->
+                    hasMoreResults = listPlaces.size == 20
+                    currentState = currentState.copy(
+                        isLoading = false,
+                        places = listPlaces.map { it.toVM() })
+                }, {
+                    currentState = currentState.copy(isLoading = false)
+                    sendEventViewModelScope(ShowError(it.message.orEmpty()))
+                })
         }
     }
 }

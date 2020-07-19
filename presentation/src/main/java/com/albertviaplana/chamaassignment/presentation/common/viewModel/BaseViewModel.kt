@@ -9,13 +9,14 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-abstract class BaseViewModel<S, E> : ViewModel() {
+abstract class BaseViewModel<S, E: Any> : ViewModel() {
     protected abstract val _state: MutableStateFlow<S>
     val state: StateFlow<S> by lazy { _state }
 
     protected var currentState: S
         get() = _state.value
         set(nextState) {
+            println("STATE: $nextState")
             _state.value = nextState
         }
 
@@ -24,6 +25,7 @@ abstract class BaseViewModel<S, E> : ViewModel() {
         get() = _event.openSubscription()
 
     protected fun sendEventViewModelScope(e: E) {
+        println("EVENT: ${e.javaClass.simpleName}")
         viewModelScope.launch {
             _event.send(e)
         }

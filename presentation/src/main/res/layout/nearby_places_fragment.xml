@@ -27,4 +27,14 @@
         app:layout_constraintRight_toRightOf="parent"
         android:visibility="gone"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/filter_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_filter_alt_24px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/filters" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

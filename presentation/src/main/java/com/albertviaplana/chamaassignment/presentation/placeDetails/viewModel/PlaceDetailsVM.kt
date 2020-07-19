@@ -54,7 +54,7 @@ fun Review.toVM() = ReviewVM(
 )
 
 sealed class DetailsAction
-data class LoadData(val id: String?): DetailsAction()
+data class Created(val id: String?): DetailsAction()
 
 sealed class DetailsEvent
 data class ShowError(val message: String): DetailsEvent()

@@ -2,6 +2,8 @@
 <resources>
     <string name="closed">Closed</string>
 
+    <string name="filters">Filters</string>
+
     <string name="icon_type_place">Icon corresponding to the type of place</string>
 
     <string name="nearby_places">Nearby Places</string>

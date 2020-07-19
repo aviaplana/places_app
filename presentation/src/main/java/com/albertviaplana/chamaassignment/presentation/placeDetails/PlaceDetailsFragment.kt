@@ -32,7 +32,8 @@ class PlaceDetailsFragment: Fragment(R.layout.place_details_fragment) {
         super.onCreate(savedInstanceState)
         val placeId = arguments?.getString("placeId")
         observeEvents()
-        viewModel reduce LoadData(placeId)
+
+        if (savedInstanceState == null) viewModel reduce Created(placeId)
     }
     override fun onCreateView(
         inflater: LayoutInflater,
