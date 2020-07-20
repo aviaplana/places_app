@@ -62,7 +62,7 @@
             tools:text="Awesome offices. Great facilities, location and views. Staff are great hosts" />
 
 
-        <com.albertviaplana.chamaassignment.presentation.common.RatingStarsView
+        <com.albertviaplana.places.presentation.common.RatingStarsView
             android:id="@+id/rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

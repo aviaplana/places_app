@@ -1,4 +1,4 @@
-rootProject.name = "ChamaAssignment"
+rootProject.name = "Places"
 include ':app'
 include ':domain'
 include ':infrastructure'

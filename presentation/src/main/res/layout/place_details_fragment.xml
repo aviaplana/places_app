@@ -42,7 +42,7 @@
                     android:layout_alignParentStart="true"
                     tools:text="Open now"/>
 
-                <com.albertviaplana.chamaassignment.presentation.common.RatingStarsView
+                <com.albertviaplana.places.presentation.common.RatingStarsView
                     android:id="@+id/rating"
                     android:layout_alignParentEnd="true"
                     android:layout_width="wrap_content"

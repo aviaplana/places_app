@@ -1,4 +1,4 @@
-package com.albertviaplana.chamaassignment
+package com.albertviaplana.places
 
 import org.junit.Test
 
