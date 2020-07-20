@@ -76,6 +76,7 @@
             <TextView
                 android:id="@+id/website"
                 style="@style/secondary_text"
+                android:linksClickable="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="https://www.google.com.au/about/careers/locations/sydney/"
@@ -84,6 +85,7 @@
             <TextView
                 android:id="@+id/maps_url"
                 style="@style/secondary_text"
+                android:linksClickable="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="https://maps.google.com/?cid=10281119596374313554"

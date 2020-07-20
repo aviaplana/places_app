@@ -51,6 +51,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$ver.navigation"
     implementation "androidx.navigation:navigation-fragment-ktx:$ver.navigation"
     implementation "androidx.viewpager2:viewpager2:$ver.viewpager"
+    implementation "com.android.support:design:$ver.design"
 
     implementation "io.coil-kt:coil:$ver.coil"
 

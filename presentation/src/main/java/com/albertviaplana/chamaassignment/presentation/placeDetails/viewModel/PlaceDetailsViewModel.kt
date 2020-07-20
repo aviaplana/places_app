@@ -22,7 +22,7 @@ class PlaceDetailsViewModel(private val placesService: PlacesService):
 
     private fun loadData(id: String?) {
         if (id.isNullOrEmpty()) {
-            sendEventViewModelScope(ShowError("Place id was not provided!"))
+            ShowError("Place id was not provided!").sendScoped()
         // If current state is not Loading, it means that we have the data, so no need to fetch it again
         } else if (currentState is Loading) {
             viewModelScope.launch {
@@ -30,7 +30,7 @@ class PlaceDetailsViewModel(private val placesService: PlacesService):
                     .fold({ details ->
                         currentState = DataLoaded(details.toVM())
                     }, {
-                        sendEventViewModelScope(ShowError(it.message.orEmpty()))
+                        ShowError(it.message.orEmpty()).sendScoped()
                     })
             }
         }

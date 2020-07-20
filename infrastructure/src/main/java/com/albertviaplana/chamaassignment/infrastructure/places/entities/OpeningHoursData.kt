@@ -4,12 +4,12 @@ import com.albertviaplana.chamaasignment.entities.OpenStatus
 
 
 data class OpeningHoursData(
-    val isOpen: Boolean,
+    val openNow: Boolean,
     val weekdayText: List<String>?
 )
 
 fun OpeningHoursData?.getOpenStatus() =
     this?.let {
-        if (it.isOpen) OpenStatus.OPEN
+        if (it.openNow) OpenStatus.OPEN
         else OpenStatus.CLOSED
     } ?: OpenStatus.UNKNOWN

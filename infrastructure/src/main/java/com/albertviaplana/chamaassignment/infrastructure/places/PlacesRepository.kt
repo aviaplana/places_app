@@ -1,6 +1,7 @@
 package com.albertviaplana.chamaassignment.infrastructure.places
 
 import com.albertviaplana.chamaasignment.entities.Coordinates
+import com.albertviaplana.chamaasignment.entities.PlaceType
 import com.albertviaplana.chamaassignment.infrastructure.places.api.PlacesApi
 import com.albertviaplana.chamaassignment.infrastructure.places.api.unwrap
 import com.albertviaplana.chamaassignment.infrastructure.places.entities.PlaceDetailsData
@@ -10,13 +11,28 @@ class PlacesRepository(private val api: PlacesApi) {
     var nextPageToken: String? = null
 
     //TODO: Implement runcatching equivalent
-    suspend fun getNearbyPlaces(coordinates: Coordinates, range: Int) =
-        if (range > MAX_RANGE) {
-            Result.error(Exception("Range exceeds maximum ($MAX_RANGE)"))
+    suspend fun getNearbyPlaces(coordinates: Coordinates, radius: Int, type: String) =
+        if (radius > MAX_RADIUS) {
+            Result.error(Exception("Radius exceeds maximum ($MAX_RADIUS)"))
         } else {
             try {
-                val (token, result) = api.getNearbyPlaces(coordinates.toString(), range)
-                    .unwrap()
+                val (token, result) =
+                    api.getNearbyPlaces(coordinates.toString(), radius, type)
+                        .unwrap()
+                nextPageToken = token
+                Result.success(result)
+            } catch (e: Exception) {
+                Result.error(e)
+            }
+        }
+    suspend fun getOpenedNearbyPlaces(coordinates: Coordinates, radius: Int, type: String) =
+        if (radius > MAX_RADIUS) {
+            Result.error(Exception("Radius exceeds maximum ($MAX_RADIUS)"))
+        } else {
+            try {
+                val (token, result) =
+                    api.getOpenedNearbyPlaces(coordinates.toString(), radius, type)
+                        .unwrap()
                 nextPageToken = token
                 Result.success(result)
             } catch (e: Exception) {
@@ -45,6 +61,6 @@ class PlacesRepository(private val api: PlacesApi) {
         }
 
     companion object {
-        const val MAX_RANGE = 50_000
+        const val MAX_RADIUS = 50_000
     }
 }

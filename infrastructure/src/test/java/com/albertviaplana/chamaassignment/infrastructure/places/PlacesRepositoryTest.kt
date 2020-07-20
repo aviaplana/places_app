@@ -7,7 +7,7 @@ import com.albertviaplana.chamaassignment.infrastructure.BuildConfig
 import com.albertviaplana.chamaassignment.infrastructure.di.provideGsonConverter
 import com.albertviaplana.chamaassignment.infrastructure.di.provideOkHttpClient
 import com.albertviaplana.chamaassignment.infrastructure.di.provideRetrofit
-import com.albertviaplana.chamaassignment.infrastructure.places.PlacesRepository.Companion.MAX_RANGE
+import com.albertviaplana.chamaassignment.infrastructure.places.PlacesRepository.Companion.MAX_RADIUS
 import com.albertviaplana.chamaassignment.infrastructure.places.api.PlacesAuthInterceptor
 import com.albertviaplana.chamaassignment.infrastructure.places.api.ResponseStatus
 import com.albertviaplana.chamaassignment.infrastructure.places.di.providePlacesApi
@@ -57,7 +57,7 @@ class PlacesRepositoryTest {
     }
 
     @Test
-    fun `Wrong range returns Failure`() {
+    fun `Wrong radius returns Failure`() {
         runBlocking {
             // Given
             val placeData = getMockPlaceData()
@@ -67,7 +67,7 @@ class PlacesRepositoryTest {
             val coordinates = Coordinates(12.toDouble(), 12.toDouble())
 
             // When
-            val response = repository.getNearbyPlaces(coordinates, MAX_RANGE + 1)
+            val response = repository.getNearbyPlaces(coordinates, MAX_RADIUS + 1)
 
             // Then
             assert(response is Result.Failure)

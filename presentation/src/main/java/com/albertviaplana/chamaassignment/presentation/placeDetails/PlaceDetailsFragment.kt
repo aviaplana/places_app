@@ -1,11 +1,15 @@
 package com.albertviaplana.chamaassignment.presentation.placeDetails
 
 import android.os.Bundle
+import android.text.Html
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.StringRes
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import coil.api.load
@@ -90,17 +94,29 @@ class PlaceDetailsFragment: Fragment(R.layout.place_details_fragment) {
             name.text = vm.name
             address.text = vm.address
             rating.rating = vm.rating
-            website.text = vm.webSite
-            mapsUrl.text = vm.mapsUrl
             phoneNumber.text = vm.phoneNumber
             placeIsOpen.text = vm.openStatus.getIsOpenText(root.context)
+            if (vm.webSite.isNotEmpty()) setHyperLink(website, R.string.website_link, vm.webSite)
+            if (vm.mapsUrl.isNotEmpty()) setHyperLink(mapsUrl, R.string.maps_link, vm.mapsUrl)
             (photos.adapter as PhotosAdapter).setPhotos(vm.photos)
-            vm.reviews.forEachIndexed { index, review ->
-                addReviewCellView(review, reviews, index%2 == 0) }
+            vm.reviews.forEach { addReviewCellView(it, reviews) }
         }
     }
 
-    private fun addReviewCellView(review: ReviewVM, parent: ViewGroup, darkBackground: Boolean) {
+    private fun setHyperLink(textView: TextView, @StringRes stringId: Int, url: String) {
+        val linkMovementMethod = LinkMovementMethod.getInstance()
+        textView.movementMethod = linkMovementMethod
+
+        textView.text =
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                Html.fromHtml(resources.getString(stringId, url), HtmlCompat.FROM_HTML_MODE_LEGACY)
+            } else {
+                HtmlCompat.fromHtml(resources.getString(stringId, url), HtmlCompat.FROM_HTML_MODE_LEGACY)
+            }
+
+    }
+
+    private fun addReviewCellView(review: ReviewVM, parent: ViewGroup) {
         ReviewCardBinding.inflate(layoutInflater).apply {
             name.text = review.name
             date.text = review.date

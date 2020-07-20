@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    android:padding="16dp"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="90dp"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <TextView
+        android:id="@+id/radius_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <SeekBar
+        android:id="@+id/radius"
+        android:max="99"
+        android:progress="0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Switch
+        android:id="@+id/onlyOpenNow"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/only_opened_places" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/placeType"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        app:singleSelection="true"
+        app:selectionRequired="true"
+        app:checkedChip="@+id/restaurants"
+        app:chipSpacing="10dp"
+        android:layout_height="wrap_content" />
+</LinearLayout>

@@ -24,10 +24,10 @@ abstract class BaseViewModel<S, E: Any> : ViewModel() {
     val event: ReceiveChannel<E>
         get() = _event.openSubscription()
 
-    protected fun sendEventViewModelScope(e: E) {
-        println("EVENT: ${e.javaClass.simpleName}")
+    protected fun E.sendScoped() {
+        println("EVENT: ${javaClass.simpleName}")
         viewModelScope.launch {
-            _event.send(e)
+            _event.send(this@sendScoped)
         }
     }
 }
