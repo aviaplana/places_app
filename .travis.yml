@@ -23,7 +23,7 @@ script:
         - ./gradlew assembleDebugAndroidTest
         
 before_install:
-    - echo "placesApiKey=API_KEY" >> ${TRAVIS_BUILD_DIR}/local.properties
+    - echo "placesApiKey=API_KEY" >> ./local.properties
 
 branches:
         only:
