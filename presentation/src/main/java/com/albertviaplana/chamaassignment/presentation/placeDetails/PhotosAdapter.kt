@@ -15,7 +15,6 @@ class PhotosAdapter: RecyclerView.Adapter<PhotosAdapter.PhotoViewHolder>() {
         private val binding = PhotoCellBinding.bind(view)
 
         fun bind(src: String) {
-            println("Printing $src")
             binding.photo.load(src)
         }
     }

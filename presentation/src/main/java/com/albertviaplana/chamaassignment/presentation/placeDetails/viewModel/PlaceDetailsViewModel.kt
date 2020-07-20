@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-class PlaceDetailsViewModel(private val placesService: PlacesService):
-        BaseViewModel<PlaceDetailsState, DetailsEvent>() {
+class PlaceDetailsViewModel(private val placesService: PlacesService, private val coroutineScopeProvider: CoroutineScope? = null):
+        BaseViewModel<PlaceDetailsState, DetailsEvent>(coroutineScopeProvider) {
     override val _state: MutableStateFlow<PlaceDetailsState> =
         MutableStateFlow(Loading)
 
@@ -26,7 +26,7 @@ class PlaceDetailsViewModel(private val placesService: PlacesService):
             ShowError("Place id was not provided!").sendScoped()
         // If current state is not Loading, it means that we have the data, so no need to fetch it again
         } else if (currentState is Loading) {
-            viewModelScope.launch {
+            coroutineScope.launch {
                 placesService.getPlaceDetails(id)
                     .fold({ details ->
                         currentState = DataLoaded(details.toVM())

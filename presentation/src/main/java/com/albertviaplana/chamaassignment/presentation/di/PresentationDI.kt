@@ -9,5 +9,5 @@ import org.koin.dsl.module
 @OptIn(ExperimentalCoroutinesApi::class)
 val presentationModule = module {
     viewModel { NearbyPlacesViewModel(get(), null) }
-    viewModel { PlaceDetailsViewModel(get()) }
+    viewModel { PlaceDetailsViewModel(get(), null) }
 }
