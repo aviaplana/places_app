@@ -2,6 +2,7 @@ package com.albertviaplana.chamaassignment.infrastructure.places
 
 import com.albertviaplana.chamaasignment.entities.BusinessStatus
 import com.albertviaplana.chamaasignment.entities.Coordinates
+import com.albertviaplana.chamaasignment.entities.PlaceType
 import com.albertviaplana.chamaasignment.entities.PriceLevel
 import com.albertviaplana.chamaassignment.infrastructure.BuildConfig
 import com.albertviaplana.chamaassignment.infrastructure.di.provideGsonConverter
@@ -18,7 +19,7 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Test
 
-class PlacesRepositoryTest {
+class PlacesRepositoryTest: BasePlacesApiTest() {
     private val mockServer: MockWebServer = MockWebServer()
     private val repository: PlacesRepository
 
@@ -46,7 +47,7 @@ class PlacesRepositoryTest {
             val coordinates = Coordinates(12.toDouble(), 12.toDouble())
 
             // When
-            val response = repository.getNearbyPlaces(coordinates, 12)
+            val response = repository.getNearbyPlaces(coordinates, 12, PlaceType.BAR.name)
 
             // Then
             assert(response is Result.Success)
@@ -67,33 +68,11 @@ class PlacesRepositoryTest {
             val coordinates = Coordinates(12.toDouble(), 12.toDouble())
 
             // When
-            val response = repository.getNearbyPlaces(coordinates, MAX_RADIUS + 1)
+            val response = repository.getNearbyPlaces(coordinates, MAX_RADIUS + 1, PlaceType.BAR.name)
 
             // Then
             assert(response is Result.Failure)
         }
-    }
-
-    private fun getMockPlaceData(): PlaceData {
-        val photoData = PhotoData(
-            width = 10,
-            height = 20,
-            reference = "Photo Reference"
-        )
-
-        return PlaceData(
-            id = "Place id",
-            name = "Name",
-            vicinity = "Vicinity",
-            icon = "Icon url",
-            rating = 3.5f,
-            geometry = GeometryData(LocationData(1.toDouble(), 2.toDouble())),
-            openingHours = OpeningHoursData(true),
-            status = BusinessStatus.OPERATIONAL,
-            priceLevel = PriceLevel.MODERATE.level,
-            photos = listOf(photoData),
-            types = listOf("Type 1", "Type 2")
-        )
     }
 
     private fun mockSuccessResponse(responseBody: String) {
@@ -122,7 +101,7 @@ class PlacesRepositoryTest {
             name == it.name &&
             icon == it.icon &&
             vicinity == it.vicinity &&
-            openingHours.isOpen == it.openingHours.isOpen &&
+            openingHours?.openNow == it.openingHours?.openNow &&
             id == it.id &&
             rating == it.rating &&
             priceLevel == it.priceLevel &&
@@ -141,7 +120,6 @@ class PlacesRepositoryTest {
             a == b
         }
 
-
     private fun PlaceData.toJson(): String {
         var json = """
             {
@@ -155,16 +133,21 @@ class PlacesRepositoryTest {
                 "id" : "",
                 "name" : "$name",
                 "rating" : "$rating",
-                "opening_hours" : {
-                    "open_now" : ${openingHours.isOpen}
-                },
                 "place_id" : "$id",
-                "reference" : "",
+                "reference" : "Reference",
                 "types" : ${types.joinToString(prefix = "[", postfix = "]") { "\"$it\"" }},
-                "vicinity" : "$vicinity",""${'"'},
+                "vicinity" : "$vicinity",
                 "price_level": $priceLevel,
-                "price_level": $priceLevel
             """
+
+        openingHours?.let {
+            json += """ 
+                "opening_hours" : { 
+                    "open_now" : 
+                """
+            json += it.openNow
+            json += "},"
+        }
 
         if (photos != null) {
             json += """ "photos" : """
@@ -173,10 +156,10 @@ class PlacesRepositoryTest {
         }
 
         if (status != null) {
-            json += """"business_status": "${status?.name}" , """
+            json += """"business_status": "${status?.name}" """
         }
 
-        json += """}"""".trimIndent()
+        json += "}".trimIndent()
 
         return json
     }

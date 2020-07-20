@@ -3,6 +3,7 @@ package com.albertviaplana.chamaassignment.presentation.placeDetails.viewModel
 import androidx.lifecycle.viewModelScope
 import com.albertviaplana.chamaasignment.PlacesService
 import com.albertviaplana.chamaassignment.presentation.common.viewModel.BaseViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch

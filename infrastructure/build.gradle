@@ -62,5 +62,5 @@ dependencies {
 
     testImplementation "com.squareup.okhttp3:mockwebserver:$testVer.okhttp"
     testImplementation "junit:junit:$testVer.junit"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$testVer.coroutines"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$testVer.mockitoKotlin"
 }

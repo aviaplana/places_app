@@ -1,18 +1,20 @@
 package com.albertviaplana.chamaassignment.presentation.nearbyPlaces.viewModel
 
-import androidx.lifecycle.viewModelScope
 import com.albertviaplana.chamaasignment.PlacesService
 import com.albertviaplana.chamaasignment.entities.PlaceType
 import com.albertviaplana.chamaassignment.presentation.common.viewModel.BaseViewModel
 import com.github.kittinunf.result.Result
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.util.*
 
 @ExperimentalCoroutinesApi
-class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewModel<NearbyPlacesVM, NearbyEvent>() {
+class NearbyPlacesViewModel(private val placesService: PlacesService, private val coroutineScopeProvider: CoroutineScope? = null):
+        BaseViewModel<NearbyPlacesVM, NearbyEvent>(coroutineScopeProvider) {
     private val placeTypeFilters = listOf(PlaceType.BAR, PlaceType.CAFE, PlaceType.RESTAURANT)
+
     @ExperimentalStdlibApi
     override val _state: MutableStateFlow<NearbyPlacesVM> =
         MutableStateFlow(NearbyPlacesVM(
@@ -101,7 +103,7 @@ class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewM
         if (!currentState.isLoading && hasMoreResults) {
             currentState = currentState.copy(isLoading = true)
 
-            viewModelScope.launch {
+            coroutineScope.launch {
                 placesService.getNextPageNearbyPlaces()
                     .fold({ listPlaces ->
                         hasMoreResults = listPlaces.size == 20
@@ -134,7 +136,7 @@ class NearbyPlacesViewModel(private val placesService: PlacesService): BaseViewM
     }
 
     private fun fetchInitialData() {
-        viewModelScope.launch {
+        coroutineScope.launch {
             val radius = mapProgressToRadius(currentState.filters.radiusProgress)
             run {
                 val typeResult = stringToPlaceType(currentState.filters.type)

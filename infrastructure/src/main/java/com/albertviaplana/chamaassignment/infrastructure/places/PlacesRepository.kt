@@ -1,7 +1,6 @@
 package com.albertviaplana.chamaassignment.infrastructure.places
 
 import com.albertviaplana.chamaasignment.entities.Coordinates
-import com.albertviaplana.chamaasignment.entities.PlaceType
 import com.albertviaplana.chamaassignment.infrastructure.places.api.PlacesApi
 import com.albertviaplana.chamaassignment.infrastructure.places.api.unwrap
 import com.albertviaplana.chamaassignment.infrastructure.places.entities.PlaceDetailsData
